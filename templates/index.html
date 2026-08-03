@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -19,6 +19,12 @@
                 <a href="{{ url_for('data_loading') }}"
                    class="menu-item {% if active == 'data-loading' %}active{% endif %}">
                     Data Loading
+                </a>
+            </li>
+            <li>
+                <a href="{{url_for('eda_page')}}"
+                   class="menu-items { % if active =='eda'}">
+                    EDA
                 </a>
             </li>
             <li class="menu-item disabled">Preprocessing (coming soon)</li>

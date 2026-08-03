@@ -1,0 +1,7 @@
+#df = pd.read_csv(r"C:\Users\sk\PycharmProjects\PythonProject\PythonProject\placement_predict_50k Dataset (3).csv")
+#print(df.describe())
+#print(df.dtypes)
+#print(df[['CGPA','AttendancePercent']].describe())
+#print(df.hist)
+#print(df.shape)
+#print(df.head())
