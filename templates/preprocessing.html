@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Placement Prediction Project</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <h1>Placement Prediction Project</h1>
+</header>
+
+
+<div class="layout">
+
+    <!-- Left panel -->
+
+    <nav class="sidebar">
+
+        <ul>
+
+            <li>
+                <a href="{{ url_for('data_loading') }}"
+                   class="menu-item
+                   {% if active == 'data-loading' %}active{% endif %}">
+                    Data Loading
+                </a>
+            </li>
+
+
+            <li>
+                <a href="{{ url_for('eda_page') }}"
+                   class="menu-item
+                   {% if active == 'eda' %}active{% endif %}">
+                    EDA
+                </a>
+            </li>
+
+
+            <li>
+                <a href="{{ url_for('preprocessing_page') }}"
+                   class="menu-item
+                   {% if active == 'preprocessing' %}active{% endif %}">
+                    Preprocessing
+                </a>
+            </li>
+
+
+            <li class="menu-item disabled">
+                Model Training (coming soon)
+            </li>
+
+
+            <li class="menu-item disabled">
+                Prediction (coming soon)
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Main content -->
+
+    <main class="content">
+
+        <h2>Data Preprocessing</h2>
+
+
+        {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        {% if results %}
+
+            <table class="summary-table">
+
+                <tr>
+                    <td>Rows</td>
+                    <td>{{ results.n_rows }}</td>
+                </tr>
+
+                <tr>
+                    <td>Columns</td>
+                    <td>{{ results.n_cols }}</td>
+                </tr>
+
+            </table>
+
+
+            <!-- ========================================= -->
+            <!-- Outlier Fix -->
+            <!-- ========================================= -->
+
+            <h3>1. Outlier Fix</h3>
+
+            <p>
+                Outliers are detected using the IQR method
+                and fixed using clipping.
+            </p>
+
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Column</th>
+                        <th>Outlier Count</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for col, count in results.outlier_counts.items() %}
+
+                    <tr>
+
+                        <td>{{ col }}</td>
+
+                        <td>{{ count }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <!-- ========================================= -->
+            <!-- Min-Max Scaling -->
+            <!-- ========================================= -->
+
+            <h3>2. Min-Max Scaling</h3>
+
+            <p>
+                Values are transformed approximately into
+                the range 0 to 1.
+            </p>
+
+
+            <div class="table-wrapper">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            {% for col in results.minmax_preview[0].keys() %}
+
+                            <th>{{ col }}</th>
+
+                            {% endfor %}
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for row in results.minmax_preview %}
+
+                        <tr>
+
+                            {% for value in row.values() %}
+
+                            <td>{{ "%.4f"|format(value) }}</td>
+
+                            {% endfor %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- Standard Scaling -->
+            <!-- ========================================= -->
+
+            <h3>3. Standard Scaling</h3>
+
+            <p>
+                Values are transformed using mean = 0
+                and standard deviation = 1.
+            </p>
+
+
+            <div class="table-wrapper">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            {% for col in results.standard_preview[0].keys() %}
+
+                            <th>{{ col }}</th>
+
+                            {% endfor %}
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for row in results.standard_preview %}
+
+                        <tr>
+
+                            {% for value in row.values() %}
+
+                            <td>{{ "%.4f"|format(value) }}</td>
+
+                            {% endfor %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

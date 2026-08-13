@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from load_data import get_data_summary
 from placement_eda import run_eda
+from preprocessing import run_preprocessing
 
 app = Flask(__name__)
 
@@ -47,6 +48,28 @@ def eda_page():
        results=results,
        error=error,
    )
+
+@app.route("/preprocessing")
+def preprocessing_page():
+
+    error = None
+    results = None
+
+    try:
+        results = run_preprocessing()
+
+    except FileNotFoundError as e:
+        error = str(e)
+
+    except Exception as e:
+        error = f"Unexpected error: {e}"
+
+    return render_template(
+        "preprocessing.html",
+        active="preprocessing",
+        results=results,
+        error=error,
+    )
 
 
 
